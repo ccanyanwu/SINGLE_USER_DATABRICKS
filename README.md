@@ -1,5 +1,5 @@
 ### SINGLE_USER_DATABRICKS
-#A client wants to build a new infrastructure in any of the cloud services with the least privilege in place.
+# A client wants to build a new infrastructure in any of the cloud services with the least privilege in place.
 
 
 He wants to deploy a single-user data bricks cluster in the infrastructure that is highly available and also has a disaster recovery strategy in the event of failure.
