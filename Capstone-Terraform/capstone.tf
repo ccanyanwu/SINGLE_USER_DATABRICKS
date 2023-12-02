@@ -1,6 +1,10 @@
+#terraform
 provider "aws" {
   region = "us-east-1"
 }
+
+
+
 
 resource "aws_vpc" "Capstone_VPC" {
   cidr_block       = "10.0.0.0/16"
@@ -94,4 +98,62 @@ resource "aws_route_table_association" "Capstoneb" {
   route_table_id = aws_route_table.Privatert.id
 }
 
+#instance Security groups
+resource "aws_security_group" "capstonesg" {
+  name        = "capstonesg"
+  description = "capstonesg"
+  vpc_id      = aws_vpc.Capstone_VPC.id
+  tags = {
+    Name = "capstonesg"
+  }
+}
+
+
+resource "aws_vpc_security_group_ingress_rule" "capstoneing" {
+  security_group_id = aws_security_group.capstonesg.id
+  
+  cidr_ipv4   = "0.0.0.0/0"
+  from_port   = 8080
+  ip_protocol = "tcp"
+  to_port     = 8080 # Allow traffic from any IP address (you may want to restrict this based on your needs)
+  
+}
+
+resource "aws_vpc_security_group_ingress_rule" "capstoneing1" {
+  security_group_id = aws_security_group.capstonesg.id
+  
+  cidr_ipv4   = "0.0.0.0/0"
+  from_port   = 22
+  ip_protocol = "tcp"
+  to_port     = 22 # Allow traffic from any IP address (you may want to restrict this based on your needs)
+  
+}
+
+#Databricks Instance
+resource "aws_instance" "DataBricksInstance" {
+  ami           = "ami-0fc5d935ebf8bc3bc"  
+  instance_type = "t2.micro"  
+  key_name      = "aws_key"  
+  subnet_id     = aws_subnet.public.id
+  vpc_security_group_ids = [aws_security_group.capstonesg.id]
+  associate_public_ip_address = true
+
+  tags = {
+    Name = "DataBricksInstance"
+  }
+}
+
+#Jenkins Instance
+resource "aws_instance" "JenkinsInstance" {
+  ami           = "ami-0fc5d935ebf8bc3bc"  
+  instance_type = "t2.micro"  
+  key_name      = "aws_key"  
+  subnet_id     = aws_subnet.public.id
+  vpc_security_group_ids = [aws_security_group.capstonesg.id]
+  associate_public_ip_address = true
+
+  tags = {
+    Name = "JenkinsInstance"
+  }
+}
 
