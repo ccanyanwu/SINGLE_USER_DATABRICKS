@@ -13,4 +13,4 @@ Project AC:
 4. Deploy VPC and Subnets
 5. Deploy Monitoring tools any of your choice 
 6. build out the infrastructure with any CICD tools like Jenkins circleCI etc
-8. have a source code repository
+8. have a source code repository.
